@@ -7,6 +7,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import io.github.jja08111.searchview.databinding.SearchViewLayoutBinding
@@ -33,10 +34,23 @@ class SearchView @JvmOverloads constructor(
                 showQueries()
             }
         }
+        binding.editText.addTextChangedListener { editable ->
+            val text = editable?.toString() ?: ""
+            val queries = if (text.isEmpty()) {
+                this.queries
+            } else {
+                this.queries.filter { query -> query.contains(text) }
+            }
+            submitQueriesToFragment(queries)
+        }
     }
 
     fun setQueries(queries: List<String>) {
         this.queries = queries
+        submitQueriesToFragment(queries)
+    }
+
+    private fun submitQueriesToFragment(queries: List<String>) {
         val fragment = findQueryFragment()
         fragment?.submitQueries(queries)
     }
@@ -51,9 +65,10 @@ class SearchView @JvmOverloads constructor(
             return
         }
         val fragment = QueryFragment(
-            initialQueries = queries,
-            onItemClick = { index ->
-                val query = queries[index]
+            initialQueries = queries.filter { query ->
+                query.contains(binding.editText.text)
+            },
+            onItemClick = { query ->
                 onItemClick(query)
                 updateSearchText(query)
             }

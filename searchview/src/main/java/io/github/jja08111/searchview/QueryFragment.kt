@@ -9,7 +9,7 @@ import io.github.jja08111.searchview.databinding.FragmentQueryBinding
 
 internal class QueryFragment(
     private val initialQueries: List<String>,
-    private val onItemClick: (Int) -> Unit
+    private val onItemClick: (String) -> Unit
 ) : Fragment() {
 
     private var _binding: FragmentQueryBinding? = null

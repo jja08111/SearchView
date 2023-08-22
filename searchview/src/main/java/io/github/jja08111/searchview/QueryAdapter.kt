@@ -8,13 +8,18 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import io.github.jja08111.searchview.databinding.ItemQueryBinding
 
 internal class QueryAdapter(
-    private val onItemClick: (Int) -> Unit
+    private val onItemClick: (String) -> Unit
 ) : ListAdapter<String, QueryAdapter.QueryViewHolder>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QueryViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ItemQueryBinding.inflate(layoutInflater, parent, false)
-        return QueryViewHolder(binding, onItemClick = onItemClick)
+        return QueryViewHolder(
+            binding = binding,
+            onItemClick = { index ->
+                getItem(index)?.let { onItemClick(it) }
+            }
+        )
     }
 
     override fun onBindViewHolder(holder: QueryViewHolder, position: Int) {

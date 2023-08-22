@@ -15,12 +15,11 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.searchView.showQueries(
-            queries = listOf("hi", "wow"),
-            onItemClick = { query ->
-                // TODO: Fragment를 새로 생성하지 않는 방향으로 수정하기
-                binding.searchView.hideQueries(UserFragment(query = query))
-            }
-        )
+        binding.searchView.setQueries(listOf("a", "b"))
+        binding.searchView.setOnItemClickListener { query ->
+            // TODO: Fragment를 새로 생성하지 않는 방향으로 수정하기
+            binding.searchView.hideQueries(UserFragment(query = query))
+        }
+        binding.searchView.showQueries()
     }
 }

@@ -32,7 +32,7 @@ internal class QueryFragment(
         adapter.submitList(initialQueries)
     }
 
-    fun updateQueries(queries: List<String>) {
+    fun submitQueries(queries: List<String>) {
         if (_binding == null) {
             return
         }

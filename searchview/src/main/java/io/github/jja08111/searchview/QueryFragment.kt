@@ -7,7 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import io.github.jja08111.searchview.databinding.QueryLayoutBinding
 
-class QueryFragment(private val initialQueries: List<String>) : Fragment() {
+class QueryFragment(
+    private val initialQueries: List<String>,
+    private val onItemClick: (Int) -> Unit
+) : Fragment() {
 
     private var _binding: QueryLayoutBinding? = null
     private val binding: QueryLayoutBinding get() = requireNotNull(_binding)
@@ -24,7 +27,7 @@ class QueryFragment(private val initialQueries: List<String>) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = QueryAdapter()
+        val adapter = QueryAdapter(onItemClick = onItemClick)
         binding.recyclerView.adapter = adapter
         adapter.submitList(initialQueries)
     }

@@ -7,12 +7,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import io.github.jja08111.searchview.databinding.QueryItemBinding
 
-class QueryAdapter : ListAdapter<String, QueryAdapter.QueryViewHolder>(diffCallback) {
+class QueryAdapter(
+    private val onItemClick: (Int) -> Unit
+) : ListAdapter<String, QueryAdapter.QueryViewHolder>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QueryViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = QueryItemBinding.inflate(layoutInflater, parent, false)
-        return QueryViewHolder(binding)
+        return QueryViewHolder(binding, onItemClick = onItemClick)
     }
 
     override fun onBindViewHolder(holder: QueryViewHolder, position: Int) {
@@ -22,7 +24,16 @@ class QueryAdapter : ListAdapter<String, QueryAdapter.QueryViewHolder>(diffCallb
         }
     }
 
-    class QueryViewHolder(private val binding: QueryItemBinding) : ViewHolder(binding.root) {
+    class QueryViewHolder(
+        private val binding: QueryItemBinding,
+        private val onItemClick: (Int) -> Unit
+    ) : ViewHolder(binding.root) {
+
+        init {
+            binding.root.setOnClickListener {
+                onItemClick(adapterPosition)
+            }
+        }
 
         fun bind(query: String) {
             binding.itemText.text = query

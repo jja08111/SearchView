@@ -25,8 +25,15 @@ class SearchView @JvmOverloads constructor(
     }
 
     // TODO: query 프래그먼트는 사용자 프래그먼트 위에 보이도록하기!
-    fun showQueries(queries: List<String>) {
-        val fragment = QueryFragment(queries)
+    fun showQueries(queries: List<String>, onItemClick: (String) -> Unit) {
+        val fragment = QueryFragment(
+            initialQueries = queries,
+            onItemClick = { index ->
+                val query = queries[index]
+                onItemClick(query)
+                updateSearchText(query)
+            }
+        )
         val fragmentManager = requireFragmentManager(context)
         val transaction = fragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, fragment)
@@ -40,6 +47,10 @@ class SearchView @JvmOverloads constructor(
         transaction.replace(R.id.fragment_container, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
+    }
+
+    private fun updateSearchText(text: String) {
+        binding.editText.setText(text)
     }
 
     private fun requireFragmentManager(context: Context?): FragmentManager {

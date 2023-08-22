@@ -5,22 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import io.github.jja08111.searchview.databinding.QueryLayoutBinding
+import io.github.jja08111.searchview.databinding.FragmentQueryBinding
 
 class QueryFragment(
     private val initialQueries: List<String>,
     private val onItemClick: (Int) -> Unit
 ) : Fragment() {
 
-    private var _binding: QueryLayoutBinding? = null
-    private val binding: QueryLayoutBinding get() = requireNotNull(_binding)
+    private var _binding: FragmentQueryBinding? = null
+    private val binding: FragmentQueryBinding get() = requireNotNull(_binding)
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = QueryLayoutBinding.inflate(inflater, container, false)
+        _binding = FragmentQueryBinding.inflate(inflater, container, false)
         return binding.root
     }
 

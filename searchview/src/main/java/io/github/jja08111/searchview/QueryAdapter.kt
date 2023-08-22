@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import io.github.jja08111.searchview.databinding.ItemQueryBinding
 
-class QueryAdapter(
+internal class QueryAdapter(
     private val onItemClick: (Int) -> Unit
 ) : ListAdapter<String, QueryAdapter.QueryViewHolder>(diffCallback) {
 
@@ -24,7 +24,7 @@ class QueryAdapter(
         }
     }
 
-    class QueryViewHolder(
+    internal class QueryViewHolder(
         private val binding: ItemQueryBinding,
         private val onItemClick: (Int) -> Unit
     ) : ViewHolder(binding.root) {

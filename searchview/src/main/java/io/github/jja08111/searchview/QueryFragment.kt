@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import io.github.jja08111.searchview.databinding.FragmentQueryBinding
 
-class QueryFragment(
+internal class QueryFragment(
     private val initialQueries: List<String>,
     private val onItemClick: (Int) -> Unit
 ) : Fragment() {

@@ -3,6 +3,7 @@ package io.github.jja08111.searchview
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import io.github.jja08111.searchview.databinding.ActivityMainBinding
+import io.github.jja08111.searchview.user.UserFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,6 +15,12 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.searchView.showQueries(listOf("hi", "wow"), onItemClick = { println(it) })
+        binding.searchView.showQueries(
+            queries = listOf("hi", "wow"),
+            onItemClick = { query ->
+                // TODO: Fragment를 새로 생성하지 않는 방향으로 수정하기
+                binding.searchView.hideQueries(UserFragment(query = query))
+            }
+        )
     }
 }

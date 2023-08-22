@@ -50,6 +50,7 @@ class SearchView @JvmOverloads constructor(
     }
 
     private fun updateSearchText(text: String) {
+        // TODO: 커서 위치 맨 끝으로 이동하기
         binding.editText.setText(text)
     }
 

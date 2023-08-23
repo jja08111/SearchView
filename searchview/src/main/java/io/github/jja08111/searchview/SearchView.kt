@@ -62,18 +62,18 @@ class SearchView @JvmOverloads constructor(
             } else {
                 this.queries.filter { query -> query.contains(text) }
             }
-            submitQueriesToFragment(queries)
+            trySubmitQueriesToFragment(queries)
         }
     }
 
     fun setQueries(queries: List<String>) {
         this.queries = queries
-        submitQueriesToFragment(queries)
+        trySubmitQueriesToFragment(queries)
     }
 
-    private fun submitQueriesToFragment(queries: List<String>) {
-        val fragment = findQueryFragment()
-        fragment?.submitQueries(queries)
+    private fun trySubmitQueriesToFragment(queries: List<String>) {
+        val fragment = findQueryFragment(forcePendingTransactions = true)
+        fragment?.trySubmitQueries(queries)
     }
 
     fun setOnItemClickListener(onItemClick: (String) -> Unit) {
@@ -104,8 +104,11 @@ class SearchView @JvmOverloads constructor(
         binding.editText.setText(text)
     }
 
-    private fun findQueryFragment(): QueryFragment? {
+    private fun findQueryFragment(forcePendingTransactions: Boolean = false): QueryFragment? {
         val fragmentManager = requireFragmentManager(context)
+        if (forcePendingTransactions) {
+            fragmentManager.executePendingTransactions()
+        }
         return (fragmentManager.findFragmentById(R.id.fragment_container) as? QueryFragment)
     }
 

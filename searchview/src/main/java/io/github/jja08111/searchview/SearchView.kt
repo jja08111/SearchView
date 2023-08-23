@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import io.github.jja08111.searchview.databinding.SearchViewLayoutBinding
 import java.util.concurrent.atomic.AtomicBoolean
@@ -29,6 +28,27 @@ class SearchView @JvmOverloads constructor(
 
     init {
         addView(binding.root)
+        initQueryFragment()
+        initEditText()
+        // TODO: Add back button listener for showing queries
+    }
+
+    private fun initQueryFragment() {
+        val fragment = QueryFragment(
+            onItemClick = { query ->
+                onItemClick(query)
+                updateSearchText(query)
+            }
+        )
+        val fragmentManager = requireFragmentManager(context)
+        val transaction = fragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_container, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+        showQueries()
+    }
+
+    private fun initEditText() {
         binding.editText.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 showQueries()
@@ -59,38 +79,23 @@ class SearchView @JvmOverloads constructor(
         this.onItemClick = onItemClick
     }
 
-    // TODO: query 프래그먼트는 사용자 프래그먼트 위에 보이도록하기!
     fun showQueries() {
         if (showQuery.getAndSet(true)) {
             return
         }
-        val fragment = QueryFragment(
-            initialQueries = queries.filter { query ->
-                query.contains(binding.editText.text)
-            },
-            onItemClick = { query ->
-                onItemClick(query)
-                updateSearchText(query)
-            }
-        )
-        val fragmentManager = requireFragmentManager(context)
-        val transaction = fragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
+        val queryFragment = findQueryFragment()
+        queryFragment?.view?.visibility = VISIBLE
+        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
     }
 
-    fun hideQueries(fragment: Fragment) {
+    fun hideQueries() {
         if (!showQuery.getAndSet(false)) {
             return
         }
-        val fragmentManager = requireFragmentManager(context)
-        val transaction = fragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
-
         clearFocusFromEditText()
+        val queryFragment = findQueryFragment()
+        queryFragment?.view?.visibility = GONE
+        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
     }
 
     private fun updateSearchText(text: String) {

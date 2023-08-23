@@ -3,7 +3,8 @@ package io.github.jja08111.searchview
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import io.github.jja08111.searchview.databinding.ActivityMainBinding
-import io.github.jja08111.searchview.user.UserFragment
+import io.github.jja08111.searchview.model.users
+import io.github.jja08111.searchview.user.UserAdapter
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,11 +16,21 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initSearchView()
+        initRecyclerView()
+    }
+
+    private fun initSearchView() {
         binding.searchView.setQueries(listOf("a", "b"))
         binding.searchView.setOnItemClickListener { query ->
-            // TODO: Fragment를 새로 생성하지 않는 방향으로 수정하기
-            binding.searchView.hideQueries(UserFragment(query = query))
+            binding.searchView.hideQueries()
+
+            val adapter = binding.recyclerView.adapter as? UserAdapter
+            adapter?.submitList(users.filter { it.name.contains(query) })
         }
-        binding.searchView.showQueries()
+    }
+
+    private fun initRecyclerView() {
+        binding.recyclerView.adapter = UserAdapter().also { it.submitList(users) }
     }
 }

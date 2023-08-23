@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import io.github.jja08111.searchview.databinding.FragmentQueryBinding
 
 internal class QueryFragment(
-    private val initialQueries: List<String>,
     private val onItemClick: (String) -> Unit
 ) : Fragment() {
 
@@ -29,7 +28,6 @@ internal class QueryFragment(
 
         val adapter = QueryAdapter(onItemClick = onItemClick)
         binding.recyclerView.adapter = adapter
-        adapter.submitList(initialQueries)
     }
 
     fun submitQueries(queries: List<String>) {

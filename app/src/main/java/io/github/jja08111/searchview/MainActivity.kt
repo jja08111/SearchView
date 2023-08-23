@@ -23,8 +23,6 @@ class MainActivity : AppCompatActivity() {
     private fun initSearchView() {
         binding.searchView.setQueries(listOf("a", "b"))
         binding.searchView.setOnItemClickListener { query ->
-            binding.searchView.hideQueries()
-
             val adapter = binding.recyclerView.adapter as? UserAdapter
             adapter?.submitList(users.filter { it.name.contains(query) })
         }
@@ -32,5 +30,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun initRecyclerView() {
         binding.recyclerView.adapter = UserAdapter().also { it.submitList(users) }
+        binding.recyclerView.itemAnimator = null
     }
 }

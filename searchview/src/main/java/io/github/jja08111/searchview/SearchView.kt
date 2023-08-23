@@ -38,6 +38,7 @@ class SearchView @JvmOverloads constructor(
             onItemClick = { query ->
                 onItemClick(query)
                 updateSearchText(query)
+                hideQueries()
             }
         )
         val fragmentManager = requireFragmentManager(context)

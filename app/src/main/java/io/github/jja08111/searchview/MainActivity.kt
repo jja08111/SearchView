@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
             val adapter = binding.recyclerView.adapter as? UserAdapter
             adapter?.submitList(users.filter { it.name.contains(query) })
         }
+        binding.searchView.setEditTextHint(hint = getString(R.string.search_view_edit_text_hint))
     }
 
     private fun initRecyclerView() {

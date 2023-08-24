@@ -99,6 +99,10 @@ class SearchView @JvmOverloads constructor(
         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
     }
 
+    fun setEditTextHint(hint: String) {
+        binding.editText.hint = hint
+    }
+
     private fun updateSearchText(text: String) {
         // TODO: 커서 위치 맨 끝으로 이동하기
         binding.editText.setText(text)

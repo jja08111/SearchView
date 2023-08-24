@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Search View</string>
+    <string name="search_view_edit_text_hint">Search users</string>
 </resources>

@@ -1,6 +1,7 @@
 package io.github.jja08111.searchview
 
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -27,6 +28,8 @@ class MainActivity : AppCompatActivity() {
 
         _viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
+        onBackPressedDispatcher.addCallback(onBackPressedCallback)
+
         initSearchView()
         initRecyclerView()
 
@@ -39,11 +42,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if (binding.searchView.showQuery) {
+                binding.searchView.hideQueries()
+                submitFilteredListToAdapter(binding.searchView.query)
+            }
+        }
+    }
+
     private fun initSearchView() {
         binding.searchView.setOnQueryListener { query ->
             viewModel.updateQuery(query)
-            val adapter = binding.recyclerView.adapter as? UserAdapter
-            adapter?.submitList(users.filter { it.name.contains(query, ignoreCase = true) })
+            submitFilteredListToAdapter(query)
+        }
+        binding.searchView.setOnQueryListVisibleChangeListener { visible ->
+            onBackPressedCallback.isEnabled = visible
         }
         binding.searchView.setEditTextHint(hint = getString(R.string.search_view_edit_text_hint))
     }
@@ -51,5 +65,10 @@ class MainActivity : AppCompatActivity() {
     private fun initRecyclerView() {
         binding.recyclerView.adapter = UserAdapter().also { it.submitList(users) }
         binding.recyclerView.itemAnimator = null
+    }
+
+    private fun submitFilteredListToAdapter(queryToFilter: String) {
+        val adapter = binding.recyclerView.adapter as? UserAdapter
+        adapter?.submitList(users.filter { it.name.contains(queryToFilter, ignoreCase = true) })
     }
 }

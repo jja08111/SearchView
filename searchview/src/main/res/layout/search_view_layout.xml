@@ -14,11 +14,12 @@
         android:imeOptions="actionSearch"
         android:inputType="text" />
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragment_container"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/query_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        tools:layout="@layout/fragment_query" />
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_query" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

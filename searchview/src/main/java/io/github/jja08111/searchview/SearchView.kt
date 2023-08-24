@@ -57,14 +57,8 @@ class SearchView @JvmOverloads constructor(
                 showQueries()
             }
         }
-        binding.editText.addTextChangedListener { editable ->
-            val text = editable?.toString() ?: ""
-            val queries = if (text.isEmpty()) {
-                this.queries
-            } else {
-                this.queries.filter { query -> query.contains(text, ignoreCase = true) }
-            }
-            trySubmitQueriesToFragment(queries)
+        binding.editText.addTextChangedListener {
+            trySubmitFilteredQueries(queries)
         }
         binding.editText.setOnEditorActionListener { _, actionId, _ ->
             return@setOnEditorActionListener if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -79,12 +73,18 @@ class SearchView @JvmOverloads constructor(
 
     fun setQueries(queries: List<String>) {
         this.queries = queries
-        trySubmitQueriesToFragment(queries)
+        trySubmitFilteredQueries(queries)
     }
 
-    private fun trySubmitQueriesToFragment(queries: List<String>) {
+    private fun trySubmitFilteredQueries(queries: List<String>) {
+        val text = binding.editText.text?.toString() ?: ""
+        val filteredQueries = if (text.isEmpty()) {
+            queries
+        } else {
+            queries.filter { query -> query.contains(text, ignoreCase = true) }
+        }
         val fragment = findQueryFragment(forcePendingTransactions = true)
-        fragment?.trySubmitQueries(queries)
+        fragment?.trySubmitQueries(filteredQueries)
     }
 
     fun setOnQueryListener(onQuery: (String) -> Unit) {

@@ -3,6 +3,7 @@ package io.github.jja08111.searchview
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
@@ -11,6 +12,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.FragmentManager
 import io.github.jja08111.searchview.databinding.SearchViewLayoutBinding
 import java.util.concurrent.atomic.AtomicBoolean
+
 
 class SearchView @JvmOverloads constructor(
     context: Context,
@@ -24,7 +26,7 @@ class SearchView @JvmOverloads constructor(
 
     private val showQuery = AtomicBoolean(false)
     private var queries: List<String> = emptyList()
-    private var onItemClick: (String) -> Unit = {}
+    private var onQuery: (String) -> Unit = {}
 
     init {
         addView(binding.root)
@@ -36,7 +38,7 @@ class SearchView @JvmOverloads constructor(
     private fun initQueryFragment() {
         val fragment = QueryFragment(
             onItemClick = { query ->
-                onItemClick(query)
+                onQuery(query)
                 updateSearchText(query)
                 hideQueries()
             }
@@ -64,6 +66,15 @@ class SearchView @JvmOverloads constructor(
             }
             trySubmitQueriesToFragment(queries)
         }
+        binding.editText.setOnEditorActionListener { _, actionId, _ ->
+            return@setOnEditorActionListener if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                onQuery(binding.editText.text.toString())
+                hideQueries()
+                true
+            } else {
+                false
+            }
+        }
     }
 
     fun setQueries(queries: List<String>) {
@@ -76,8 +87,8 @@ class SearchView @JvmOverloads constructor(
         fragment?.trySubmitQueries(queries)
     }
 
-    fun setOnItemClickListener(onItemClick: (String) -> Unit) {
-        this.onItemClick = onItemClick
+    fun setOnQueryListener(onQuery: (String) -> Unit) {
+        this.onQuery = onQuery
     }
 
     fun showQueries() {

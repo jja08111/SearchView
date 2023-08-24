@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initSearchView() {
         binding.searchView.setQueries(queries)
-        binding.searchView.setOnItemClickListener { query ->
+        binding.searchView.setOnQueryListener { query ->
             val adapter = binding.recyclerView.adapter as? UserAdapter
             adapter?.submitList(users.filter { it.name.contains(query, ignoreCase = true) })
         }

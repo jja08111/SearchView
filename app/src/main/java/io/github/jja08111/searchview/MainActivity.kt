@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         binding.searchView.setQueries(queries)
         binding.searchView.setOnItemClickListener { query ->
             val adapter = binding.recyclerView.adapter as? UserAdapter
-            adapter?.submitList(users.filter { it.name.contains(query) })
+            adapter?.submitList(users.filter { it.name.contains(query, ignoreCase = true) })
         }
         binding.searchView.setEditTextHint(hint = getString(R.string.search_view_edit_text_hint))
     }

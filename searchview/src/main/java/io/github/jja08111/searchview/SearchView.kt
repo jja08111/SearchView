@@ -60,7 +60,7 @@ class SearchView @JvmOverloads constructor(
             val queries = if (text.isEmpty()) {
                 this.queries
             } else {
-                this.queries.filter { query -> query.contains(text) }
+                this.queries.filter { query -> query.contains(text, ignoreCase = true) }
             }
             trySubmitQueriesToFragment(queries)
         }

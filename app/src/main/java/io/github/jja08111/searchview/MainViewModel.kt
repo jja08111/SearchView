@@ -21,11 +21,7 @@ class MainViewModel : ViewModel() {
 
     fun updateQuery(query: String) {
         _recentQueriesState.update { recentQueries ->
-            if (recentQueries.contains(query)) {
-                listOf(query) + recentQueries.filterNot { it == query }
-            } else {
-                listOf(query) + recentQueries
-            }
+            listOf(query) + recentQueries.filterNot { it == query }
         }
     }
 }
